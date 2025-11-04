@@ -38,30 +38,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
+            // Si Netlify est configuré sur le formulaire, ne pas empêcher la soumission
+            const usesNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
+            if (usesNetlify) {
+                // Laisser Netlify intercepter la requête POST et rediriger vers success.html
+                return;
+            }
+
+            // Sinon, ancien comportement de simulation (environnement local sans Netlify)
             e.preventDefault();
-            
-            // Simuler l'envoi du formulaire
+
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            
+
             submitBtn.textContent = 'Envoi en cours...';
             submitBtn.disabled = true;
-            
-            // Simuler un délai d'envoi
+
             setTimeout(() => {
-                // Afficher un message de confirmation
                 const formMessage = document.createElement('div');
                 formMessage.className = 'form-message success';
                 formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
                 formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
-                
+
                 contactForm.appendChild(formMessage);
                 contactForm.reset();
-                
+
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-                
-                // Faire disparaître le message après 5 secondes
+
                 setTimeout(() => {
                     formMessage.style.opacity = '0';
                     formMessage.style.transition = 'opacity 0.5s ease';
