@@ -36,45 +36,48 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Gestion du formulaire de contact
     const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
-            if (isNetlify) {
-                // Laisser Netlify gérer la soumission nativement (pas de redirection locale)
-                return;
-            } else {
-                // Mode local: empêcher la soumission et simuler un envoi
-                e.preventDefault();
-                // Simuler l'envoi du formulaire pour les autres pages
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
+        if (isNetlify) {
+            // ✅ NE PAS bloquer, laisser le navigateur gérer
+            // Ne pas utiliser return ou preventDefault ici.
+            return true;
+        } else {
+            // Mode local: empêcher la soumission et simuler un envoi
+            e.preventDefault();
 
-                submitBtn.textContent = 'Envoi en cours...';
-                submitBtn.disabled = true;
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+
+            submitBtn.textContent = 'Envoi en cours...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                const formMessage = document.createElement('div');
+                formMessage.className = 'form-message success';
+                formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
+                formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
+
+                contactForm.appendChild(formMessage);
+                contactForm.reset();
+
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
 
                 setTimeout(() => {
-                    const formMessage = document.createElement('div');
-                    formMessage.className = 'form-message success';
-                    formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
-                    formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
-
-                    contactForm.appendChild(formMessage);
-                    contactForm.reset();
-
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-
+                    formMessage.style.opacity = '0';
+                    formMessage.style.transition = 'opacity 0.5s ease';
                     setTimeout(() => {
-                        formMessage.style.opacity = '0';
-                        formMessage.style.transition = 'opacity 0.5s ease';
-                        setTimeout(() => {
-                            formMessage.remove();
-                        }, 500);
-                    }, 5000);
-                }, 1500);
-            }
-        });
-    }
+                        formMessage.remove();
+                    }, 500);
+                }, 5000);
+            }, 1500);
+        }
+    });
+}
+
+    
     // Header sticky au scroll
     const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
