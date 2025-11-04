@@ -34,47 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     sections.forEach(s => observer.observe(s));
     
-    // Gestion du formulaire de contact
-    
-const contactForm = document.querySelector('form[name="contact"]');
-if (contactForm) {
-  contactForm.addEventListener('submit', function(e) {
-    const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
-
-    if (isNetlify) {
-      // ✅ Laisser Netlify gérer la soumission
-      return; 
-    } else {
-      // Mode local (simulation)
-      e.preventDefault();
-
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-
-      submitBtn.textContent = 'Envoi en cours...';
-      submitBtn.disabled = true;
-
-      setTimeout(() => {
-        const formMessage = document.createElement('div');
-        formMessage.className = 'form-message success';
-        formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
-        formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
-
-        contactForm.appendChild(formMessage);
-        contactForm.reset();
-
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-
-        setTimeout(() => {
-          formMessage.style.opacity = '0';
-          formMessage.style.transition = 'opacity 0.5s ease';
-          setTimeout(() => formMessage.remove(), 500);
-        }, 5000);
-      }, 1500);
-    }
-  });
-}
+  
 
 
     
