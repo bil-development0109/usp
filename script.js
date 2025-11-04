@@ -38,33 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
             const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
-
             if (isNetlify) {
-                const formData = new FormData(this);
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-
-                submitBtn.textContent = 'Envoi en cours...';
-                submitBtn.disabled = true;
-
-                fetch('/', {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(formData).toString()
-                })
-                .then(() => {
-                    window.location.href = this.action;
-                })
-                .catch((error) => {
-                    alert("Erreur lors de l'envoi du formulaire : " + error);
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                });
-
+                // Laisser Netlify gérer la soumission nativement (pas de redirection locale)
+                return;
             } else {
+                // Mode local: empêcher la soumission et simuler un envoi
+                e.preventDefault();
                 // Simuler l'envoi du formulaire pour les autres pages
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
