@@ -35,48 +35,85 @@ document.addEventListener('DOMContentLoaded', function() {
     sections.forEach(s => observer.observe(s));
     
     // Gestion du formulaire de contact
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            // Si Netlify est configuré sur le formulaire, ne pas empêcher la soumission
-            const usesNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
-            if (usesNetlify) {
-                // Laisser Netlify intercepter la requête POST et rediriger vers success.html
-                return;
-            }
+const contactForm = document.querySelector('.contact-form form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn?.textContent.trim() || 'Envoyer';
 
-            // Sinon, ancien comportement de simulation (environnement local sans Netlify)
-            e.preventDefault();
+        // Vérifie si Netlify gère le formulaire
+        const usesNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
 
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-
+        if (usesNetlify) {
+            // Netlify va gérer → on ne bloque pas
+            // Mais on donne un feedback visuel
             submitBtn.textContent = 'Envoi en cours...';
             submitBtn.disabled = true;
 
+            // Optionnel : écouter la réponse Netlify (redirection ou erreur)
+            // Netlify redirige automatiquement → rien à faire
+            return;
+        }
+
+        // === MODE LOCAL SANS NETLIFY (simulation) ===
+        e.preventDefault();
+
+        submitBtn.textContent = 'Envoi en cours...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            // Message de succès
+            const formMessage = document.createElement('div');
+            formMessage.className = 'form-message success';
+            formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
+            formMessage.style.cssText = `
+                background-color: #d4edda;
+                color: #155724;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+                border: 1px solid #c3e6cb;
+                opacity: 1;
+                transition: opacity 0.5s ease;
+            `;
+
+            contactForm.appendChild(formMessage);
+            contactForm.reset();
+
+            // Restaure le bouton
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+
+            // Disparition progressive du message
             setTimeout(() => {
-                const formMessage = document.createElement('div');
-                formMessage.className = 'form-message success';
-                formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
-                formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
+                formMessage.style.opacity = '0';
+                setTimeout(() => formMessage.remove(), 500);
+            }, 4000);
 
-                contactForm.appendChild(formMessage);
-                contactForm.reset();
+        }, 1500);
+    });
+}
+// À ajouter **après** le `if (usesNetlify)`
+if (usesNetlify) {
+    submitBtn.textContent = 'Envoi en cours...';
+    submitBtn.disabled = true;
 
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
+    // Écoute les erreurs Netlify (via data-netlify-success/error)
+    const handleNetlifyResponse = () => {
+        const url = new URL(window.location);
+        if (url.searchParams.get('success') === 'true') {
+            // Optionnel : message personnalisé
+            showSuccessMessage();
+        } else if (url.searchParams.get('error')) {
+            showErrorMessage('Erreur lors de l’envoi. Veuillez réessayer.');
+        }
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    };
 
-                setTimeout(() => {
-                    formMessage.style.opacity = '0';
-                    formMessage.style.transition = 'opacity 0.5s ease';
-                    setTimeout(() => {
-                        formMessage.remove();
-                    }, 500);
-                }, 5000);
-            }, 1500);
-        });
-    }
-    
+    window.addEventListener('load', handleNetlifyResponse);
+    return;
+}
     // Header sticky au scroll
     const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
