@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Cynophile - USP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="script.js"></script>
+    <style>
+        /* Ajustements locaux légers (si besoin spécifique à la page) */
+        .contact-section { padding: 60px 0; }
+    </style>
+    </head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="asset/logo usp.png" alt="Logo USP">
+                <div>
+                    <h1 class="company-name">USP</h1>
+                    <p class="company-tagline">Union Security Privée</p>
+                </div>
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="index.html#avis">Avis</a></li>
+                    <li><a href="index.html#a-propos">À Propos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="service-page-hero">
+        <div class="container">
+            <h1>Agent Cynophile</h1>
+            <p>Sécurité renforcée avec équipes cynophiles qualifiées et expérimentées</p>
+        </div>
+    </section>
+
+    <!-- Section Maître-Chien supprimée conformément à la demande -->
+
+    <section class="service-testimonials">
+        <div class="container">
+            <h3>Avis de nos clients</h3>
+            <div class="testimonial">
+                <p>"Les agents cynophiles d'USP ont permis de sécuriser efficacement nos entrepôts. Présence dissuasive et interventions impeccables."</p>
+                <span>- Responsable Logistique</span>
+            </div>
+            <div class="testimonial">
+                <p>"Excellente coordination sur un événement sportif. Les équipes cynophiles ont assuré la sécurité des zones sensibles sans perturber la circulation des personnes."</p>
+                <span>- Organisateur d'événements</span>
+            </div>
+            <div class="testimonial">
+                <p>"Professionnalisme et réactivité. Les agents ont su s'adapter rapidement aux besoins de notre site industriel."</p>
+                <span>- Directeur de site industriel</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contactez-nous</h2>
+            <form class="contact-form" action="#" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nom complet</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="votre@email.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Votre numéro">
+                    </div>
+                    <div class="form-group">
+                        <label for="requestType">Type de demande</label>
+                        <select id="requestType" name="requestType" class="form-control" required>
+                            <option value="" disabled selected>Choisir une option</option>
+                            <option value="devis">Demande de devis</option>
+                            <option value="informations">Demande d'informations</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service souhaité</label>
+                    <select id="service" name="service" class="form-control" required>
+                        <option value="" disabled selected>Sélectionnez un service</option>
+                        <option value="gardiennage-surveillance">Gardiennage et Surveillance</option>
+                        <option value="securite-evenementielle">Sécurité Événementielle</option>
+                        <option value="securite-incendie">Sécurité Incendie</option>
+                        <option value="agent-mobile">Agent Mobile</option>
+                        <option value="agent-cynophile">Agent Cynophile</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" class="form-control" placeholder="Expliquez votre besoin" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn">Envoyer</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="asset/logo usp.png" alt="Logo USP Sécurité">
+                    <p>USP - Union Security Privée</p>
+                    <p>Votre sécurité, notre priorité</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#a-propos">À Propos</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-services">
+                    <h4>Nos services</h4>
+                    <ul>
+                        <li><a href="gardiennage.html">Gardiennage et surveillance</a></li>
+                        <li><a href="securite-incendie.html">Sécurité incendie (SSIAP)</a></li>
+                        <li><a href="agent-mobile.html">Intervention sur alarme (Agent Mobile)</a></li>
+                        <li><a href="agent-cynophile.html">Agent Cynophile</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 USP Sécurité. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- script.js est chargé en <head> avec defer pour le menu mobile -->
+</body>
+</html>
