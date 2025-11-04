@@ -35,85 +35,66 @@ document.addEventListener('DOMContentLoaded', function() {
     sections.forEach(s => observer.observe(s));
     
     // Gestion du formulaire de contact
-const contactForm = document.querySelector('.contact-form form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn?.textContent.trim() || 'Envoyer';
+    const contactForm = document.querySelector('.contact-form form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        // Vérifie si Netlify gère le formulaire
-        const usesNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
+            const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
 
-        if (usesNetlify) {
-            // Netlify va gérer → on ne bloque pas
-            // Mais on donne un feedback visuel
-            submitBtn.textContent = 'Envoi en cours...';
-            submitBtn.disabled = true;
+            if (isNetlify) {
+                const formData = new FormData(this);
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
 
-            // Optionnel : écouter la réponse Netlify (redirection ou erreur)
-            // Netlify redirige automatiquement → rien à faire
-            return;
-        }
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.disabled = true;
 
-        // === MODE LOCAL SANS NETLIFY (simulation) ===
-        e.preventDefault();
+                fetch('/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
+                })
+                .then(() => {
+                    window.location.href = this.action;
+                })
+                .catch((error) => {
+                    alert("Erreur lors de l'envoi du formulaire : " + error);
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
 
-        submitBtn.textContent = 'Envoi en cours...';
-        submitBtn.disabled = true;
+            } else {
+                // Simuler l'envoi du formulaire pour les autres pages
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
 
-        setTimeout(() => {
-            // Message de succès
-            const formMessage = document.createElement('div');
-            formMessage.className = 'form-message success';
-            formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
-            formMessage.style.cssText = `
-                background-color: #d4edda;
-                color: #155724;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 5px;
-                border: 1px solid #c3e6cb;
-                opacity: 1;
-                transition: opacity 0.5s ease;
-            `;
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.disabled = true;
 
-            contactForm.appendChild(formMessage);
-            contactForm.reset();
+                setTimeout(() => {
+                    const formMessage = document.createElement('div');
+                    formMessage.className = 'form-message success';
+                    formMessage.textContent = 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.';
+                    formMessage.style.cssText = 'background-color: #d4edda; color: #155724; padding: 15px; margin-top: 20px; border-radius: 5px;';
 
-            // Restaure le bouton
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+                    contactForm.appendChild(formMessage);
+                    contactForm.reset();
 
-            // Disparition progressive du message
-            setTimeout(() => {
-                formMessage.style.opacity = '0';
-                setTimeout(() => formMessage.remove(), 500);
-            }, 4000);
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
 
-        }, 1500);
-    });
-}
-// À ajouter **après** le `if (usesNetlify)`
-if (usesNetlify) {
-    submitBtn.textContent = 'Envoi en cours...';
-    submitBtn.disabled = true;
-
-    // Écoute les erreurs Netlify (via data-netlify-success/error)
-    const handleNetlifyResponse = () => {
-        const url = new URL(window.location);
-        if (url.searchParams.get('success') === 'true') {
-            // Optionnel : message personnalisé
-            showSuccessMessage();
-        } else if (url.searchParams.get('error')) {
-            showErrorMessage('Erreur lors de l’envoi. Veuillez réessayer.');
-        }
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    };
-
-    window.addEventListener('load', handleNetlifyResponse);
-    return;
-}
+                    setTimeout(() => {
+                        formMessage.style.opacity = '0';
+                        formMessage.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => {
+                            formMessage.remove();
+                        }, 500);
+                    }, 5000);
+                }, 1500);
+            }
+        });
+    }
     // Header sticky au scroll
     const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
