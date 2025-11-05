@@ -70,6 +70,7 @@ function showSuccessOverlay() {
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
     const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
+    const isFormSubmit = this.action && this.action.includes('formsubmit.co');
 
     if (isNetlify) {
       e.preventDefault();
@@ -98,6 +99,15 @@ if (contactForm) {
           submitBtn.disabled = false;
         }
       });
+    } else if (isFormSubmit) {
+      // Laisser FormSubmit gérer la soumission, mais définir l'URL de redirection
+      const nextInput = this.querySelector('input[name="_next"]');
+      if (nextInput) {
+        const nextUrl = window.location.origin + window.location.pathname + '?submitted=true#contact';
+        nextInput.value = nextUrl;
+      }
+      // Ne pas empêcher la soumission
+      return;
     } else {
       e.preventDefault();
       const submitBtn = this.querySelector('button[type="submit"]');
@@ -122,6 +132,15 @@ if (contactForm) {
       }, 1500);
     }
   });
+}
+
+// Afficher l’animation si retour avec ?submitted=true
+const params = new URLSearchParams(window.location.search);
+if (params.get('submitted') === 'true') {
+  showSuccessOverlay();
+  // Nettoyer l’URL pour éviter de rejouer l’animation au rafraîchissement
+  const cleanUrl = window.location.pathname + window.location.hash;
+  try { history.replaceState(null, '', cleanUrl); } catch (_) {}
 }
 
 
