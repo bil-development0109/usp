@@ -1144,3 +1144,67 @@ html {
         font-size: 0.9rem;
     }
 }
+/* Success animation overlay */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.success-overlay.hide {
+  opacity: 0;
+}
+
+.success-card {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  animation: pop 300ms ease-out;
+}
+
+.success-card i {
+  font-size: 64px;
+  color: #2ecc71;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.success-card h3 {
+  margin: 8px 0 6px;
+  font-weight: 600;
+}
+
+.success-card p {
+  color: #555;
+  margin: 0;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.confetti {
+  position: fixed;
+  top: -20px;
+  width: 10px;
+  height: 16px;
+  background: #f1c40f;
+  opacity: 0.9;
+  z-index: 9998;
+  transform: rotate(0deg);
+  animation: drop 2800ms linear forwards;
+}
+
+@keyframes drop {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
