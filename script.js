@@ -69,41 +69,13 @@ function showSuccessOverlay() {
 }
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
-    const isNetlify = this.hasAttribute('data-netlify') || this.hasAttribute('netlify');
     const isFormSubmit = this.action && this.action.includes('formsubmit.co');
 
-    if (isNetlify) {
-      e.preventDefault();
-      const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.textContent : '';
-      if (submitBtn) {
-        submitBtn.textContent = 'Envoi en cours...';
-        submitBtn.disabled = true;
-      }
-      const formData = new FormData(this);
-      const body = new URLSearchParams(formData).toString();
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
-      }).then(() => {
-        if (submitBtn) {
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-        }
-        this.reset();
-        showSuccessOverlay();
-      }).catch(() => {
-        if (submitBtn) {
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-        }
-      });
-    } else if (isFormSubmit) {
+    if (isFormSubmit) {
       // Laisser FormSubmit gérer la soumission, mais définir l'URL de redirection
       const nextInput = this.querySelector('input[name="_next"]');
       if (nextInput) {
-        const nextUrl = window.location.origin + window.location.pathname + '?submitted=true#contact';
+        const nextUrl = window.location.origin + window.location.pathname + '?submitted=true';
         nextInput.value = nextUrl;
       }
       // Ne pas empêcher la soumission
